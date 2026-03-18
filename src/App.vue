@@ -2,6 +2,8 @@
 import { computed, reactive, ref } from "vue";
 import BaseInput from "./components/BaseInput.vue";
 import BaseCheckbox from "./components/BaseCheckbox.vue";
+import BaseRadioGroup from "./components/BaseRadioGroup.vue";
+import BaseSelect from "./components/BaseSelect.vue";
 
 
 const form = reactive({
@@ -47,7 +49,7 @@ const errors = computed(() => {
   if (!form.studentId.trim()) {
     e.studentId = "Student ID is required."
   } else if (!/^\d{11}$/.test(form.studentId)) {
-    e.studentId = "Student ID must be 10 digits."
+    e.studentId = "Student ID must be 11 digits."
   }
 
   if (!form.email.trim()) {
@@ -73,6 +75,10 @@ const errors = computed(() => {
 const isFormValid = computed(() => Object.keys(errors.value).length === 0)
 
 function handleSubmit() {
+  console.log(form);
+  console.log(errors);
+  
+  
   submitted.value = true
 
   if (!isFormValid.value) return
@@ -104,13 +110,21 @@ function handleSubmit() {
 
     <!-- form -->
     <div>
-      <form @submit.prevent="">
+      <form @submit.prevent="handleSubmit">
+
         <div class="grid grid-cols-2 gap-x-5 gap-y-5 mb-10">
-          <BaseInput label="Full Name" type="text" desc="Enter your full name"/>
-          <BaseInput label="Student ID" type="number" desc="e.g. 6601234567"/>
-          <BaseInput label="Email" type="email" desc="yourname@example.com"/>
-          <BaseInput label="Password" type="text" desc="At least 8 characters"/>
+          <BaseInput v-model="form.fullName" label="Full Name" type="text" desc="Enter your full name"/>
+          <BaseInput v-model="form.studentId" label="Student ID" type="tel" desc="e.g. 6601234567"/>
+          <BaseInput v-model="form.email" label="Email" type="email" desc="yourname@example.com"/>
+          <BaseInput v-model="form.password" label="Password" type="password" desc="At least 8 characters"/>
+          <BaseSelect v-model="form.program" label="Program / Major" desc="Select your program" :data="programOptions"/>
+          <BaseSelect v-model="form.track" label="Workshop Track" desc="Select a track" :data="trackOptions"/>
         </div>
+
+        <div class="mb-10">
+          <BaseRadioGroup v-model="form.yearLevel" label="Year Level" type="radio" :data="yearOptions"/>
+        </div>
+
         <div class="mb-10">
           <BaseCheckbox v-model="form.agree"/>
         </div>
