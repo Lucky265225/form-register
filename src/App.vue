@@ -113,12 +113,12 @@ function handleSubmit() {
       <form @submit.prevent="handleSubmit">
 
         <div class="grid grid-cols-2 gap-x-5 gap-y-5 mb-10">
-          <BaseInput v-model="form.fullName" label="Full Name" type="text" desc="Enter your full name"/>
-          <BaseInput v-model="form.studentId" label="Student ID" type="tel" desc="e.g. 6601234567"/>
-          <BaseInput v-model="form.email" label="Email" type="email" desc="yourname@example.com"/>
-          <BaseInput v-model="form.password" label="Password" type="password" desc="At least 8 characters"/>
-          <BaseSelect v-model="form.program" label="Program / Major" desc="Select your program" :data="programOptions"/>
-          <BaseSelect v-model="form.track" label="Workshop Track" desc="Select a track" :data="trackOptions"/>
+          <BaseInput v-model="form.fullName" label="Full Name" type="text" desc="Enter your full name" :error="submitted && errors.fullName"/>
+          <BaseInput v-model="form.studentId" label="Student ID" type="tel" desc="e.g. 6601234567" :error="submitted && errors.studentId"/>
+          <BaseInput v-model="form.email" label="Email" type="email" desc="yourname@example.com" :error="submitted && errors.email"/>
+          <BaseInput v-model="form.password" label="Password" type="password" desc="At least 8 characters" :error="submitted && errors.password"/>
+          <BaseSelect v-model="form.program" label="Program / Major" desc="Select your program" :data="programOptions" :error="submitted && errors.program"/>
+          <BaseSelect v-model="form.track" label="Workshop Track" desc="Select a track" :data="trackOptions" :error="submitted && errors.track"/>
         </div>
 
         <div class="mb-10">
