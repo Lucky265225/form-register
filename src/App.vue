@@ -4,6 +4,7 @@ import BaseInput from "./components/BaseInput.vue";
 import BaseCheckbox from "./components/BaseCheckbox.vue";
 import BaseRadioGroup from "./components/BaseRadioGroup.vue";
 import BaseSelect from "./components/BaseSelect.vue";
+import BaseTextarea from "./components/BaseTextarea.vue";
 
 
 const form = reactive({
@@ -35,10 +36,10 @@ const trackOptions = [
 ]
 
 const yearOptions = [
-  { label: "Year 1", value: "1" },
-  { label: "Year 2", value: "2" },
-  { label: "Year 3", value: "3" },
-  { label: "Year 4", value: "4" },
+  { label: "Year 1", value: "1", desc: "Beginner student level"},
+  { label: "Year 2", value: "2", desc: "intermidate foundation" },
+  { label: "Year 3", value: "3", desc: "Project-focused stage" },
+  { label: "Year 4", value: "4", desc: "internship or capstone stage" },
 ]
 
 const errors = computed(() => {
@@ -83,7 +84,7 @@ function handleSubmit() {
 
   if (!isFormValid.value) return
 
-  alert("Registration submitted successfully!")
+  showAlert.value = true
 
   form.fullName = ""
   form.studentId = ""
@@ -95,6 +96,26 @@ function handleSubmit() {
   form.track = ""
   form.agree = false
   submitted.value = false
+}
+
+function handleReset() {
+  submitted.value = false 
+
+  form.fullName = ""
+  form.studentId = ""
+  form.email = ""
+  form.password = ""
+  form.program = ""
+  form.yearLevel = ""
+  form.bio = ""
+  form.track = ""
+  form.agree = false
+}
+
+const showAlert = ref(false)
+
+function handleClose() {
+  showAlert.value = false
 }
 </script>
 
@@ -122,20 +143,36 @@ function handleSubmit() {
         </div>
 
         <div class="mb-10">
-          <BaseRadioGroup v-model="form.yearLevel" label="Year Level" type="radio" :data="yearOptions"/>
+          <BaseTextarea v-model="form.bio" label="Short Bio" desc="Tell us about your interests..." />
+        </div>
+
+        <div class="mb-10">
+          <BaseRadioGroup v-model="form.yearLevel" label="Year Level" type="radio" :data="yearOptions" :error="submitted && errors.yearLevel"/>
         </div>
 
         <div class="mb-10">
           <BaseCheckbox v-model="form.agree"/>
         </div>
-
-        <div class="flex justify-between">
+        
+        <div class="flex justify-between border-t border-gray-300 pt-10">
           <p><span class="font-medium">Tip: </span><span class="text-gray-500">Try submitting the form with missing fields to see validation feedback.</span></p>
-          <button type="submit" :disabled="!form.agree"
-          :class=" !form.agree ? 'bg-gray-300' : ''"
-          class="font-bold text-xl py-2 px-3 rounded-xl bg-blue-600 text-white">Submit Registration</button>
+          <div class="flex space-x-10">
+            <button @click="handleReset" class="font-medium text-md py-2 px-3 rounded-xl border border-gray-300">Reset Form</button>
+            <button type="submit" :disabled="!form.agree"
+            :class=" !form.agree ? 'bg-gray-300' : ''"
+            class="font-bold text-xl py-2 px-3 rounded-xl bg-blue-600 text-white">Submit Registration</button>
+          </div>
         </div>
       </form>
+    </div>
+
+    <!-- alert -->
+    <div v-if="showAlert" class="fixed inset-0 flex items-center justify-center bg-gray-500/20">
+      <div class="bg-white p-5 rounded-2xl shadow-lg">
+        <h2 class="text-xl font-bold">Registration Submitted</h2>
+        <p class="text-gray-500 text-sm">Your workshop registration has been recorded successfully.</p>
+        <button @click="handleClose" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg">Close</button>
+      </div>
     </div>
   </div>
 

@@ -4,7 +4,7 @@ const data = defineProps({
     label: String,
     type: String,
     desc: String,
-    error: String,
+    error: [String,Boolean],
     modelValue: String
 })
 
@@ -15,7 +15,7 @@ const emit = defineEmits(["update:modelValue"])
 <template>
 
     <div class="flex flex-col space-y-2">
-        <label for="fullname" class="font-bold">{{ data.label }}</label>
+        <label for="fullname" class="font-bold">{{ data.label }}<span class="text-red-500"> *</span></label>
         <input :type="data.type" name="" id="fullname" :placeholder="desc"
         :value="modelValue"
         @input="emit('update:modelValue', $event.target.value)"

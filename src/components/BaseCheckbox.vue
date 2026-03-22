@@ -11,7 +11,7 @@ const emit = defineEmits(["update:modelValue"])
 <template>
 
     <div class="flex space-x-3">
-        <input 
+        <input class="accent-blue-500"
             id="agree"  
             type="checkbox"
             :checked="modelValue"
